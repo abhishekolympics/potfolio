@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(Start-Sleep -Seconds 3)",
+      "Bash(Get-Content \"C:\\\\Users\\\\abhis\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--work-related-Personal-Code-potfolio\\\\07201836-672b-4cb7-a28a-6214801b1414\\\\tasks\\\\bka45rjq7.output\")"
+    ]
+  }
+}
