@@ -83,8 +83,8 @@ function SkillCloud() {
 
   const positions = allSkills.map((_, i) => {
     const angle = (i / allSkills.length) * Math.PI * 2
-    const r = 2.5 + Math.sin(i * 1.3) * 0.5
-    const y = Math.sin(i * 0.8) * 1.2
+    const r = 1.8 + Math.sin(i * 1.3) * 0.3
+    const y = Math.sin(i * 0.8) * 0.8
     return [Math.cos(angle) * r, y, Math.sin(angle) * r]
   })
 
@@ -135,7 +135,7 @@ export default function Skills() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="h-80 mb-16 relative"
         >
-          <Canvas camera={{ position: [0, 0, 7], fov: 50 }}>
+          <Canvas camera={{ position: [0, 0, 10], fov: 55 }}>
             <Suspense fallback={null}>
               <SkillCloud />
             </Suspense>

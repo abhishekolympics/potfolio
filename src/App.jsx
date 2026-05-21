@@ -1,35 +1,43 @@
-import { useState, useEffect } from 'react'
+import { useSpaceScroll } from './hooks/useSpaceScroll'
+import GalaxyScene, { SECTION_DATA } from './components/GalaxyScene'
+import SectionOverlay from './components/SectionOverlay'
+import NavigationDots from './components/NavigationDots'
 import Navbar from './components/Navbar'
-import Hero from './components/Hero'
-import About from './components/About'
-import Skills from './components/Skills'
-import Experience from './components/Experience'
-import Achievements from './components/Achievements'
-import Contact from './components/Contact'
-import StarsBackground from './components/canvas/StarsBackground'
 
 export default function App() {
-  const [scrolled, setScrolled] = useState(false)
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  const { current, navigate } = useSpaceScroll()
 
   return (
-    <div className="relative min-h-screen bg-primary overflow-x-hidden">
-      <StarsBackground />
-      <Navbar scrolled={scrolled} />
-      <Hero />
-      <About />
-      <Skills />
-      <Experience />
-      <Achievements />
-      <Contact />
-      <footer className="text-center py-6 text-gray-600 text-sm border-t border-white/5">
-        <p>Crafted with passion by <span className="gradient-text font-semibold">Abhishek Kumar Singh</span></p>
-      </footer>
+    <div style={{ height: '100dvh', overflow: 'hidden', position: 'relative', background: '#030614' }}>
+      <GalaxyScene currentSection={current} />
+      <Navbar currentSection={current} onNavigate={navigate} />
+      <SectionOverlay current={current} navigate={navigate} />
+      <NavigationDots current={current} navigate={navigate} />
+
+      {current === 0 && (
+        <div
+          className="fixed bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 pointer-events-none"
+          style={{ animation: 'fadeInHint 1s ease 2.5s both' }}
+        >
+          <span className="text-[10px] tracking-widest uppercase" style={{ color: `${SECTION_DATA[0].color}70` }}>
+            scroll to explore
+          </span>
+          <div
+            className="w-px h-8"
+            style={{
+              background: `linear-gradient(to bottom, ${SECTION_DATA[0].color}60, transparent)`,
+              animation: 'pulse 1.6s ease-in-out infinite',
+            }}
+          />
+        </div>
+      )}
+
+      <style>{`
+        @keyframes fadeInHint {
+          from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+          to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+      `}</style>
     </div>
   )
 }

@@ -50,10 +50,10 @@ function SpinningTrophy() {
   })
 
   return (
-    <Float speed={1.5} floatIntensity={0.8}>
+    <Float speed={1.5} floatIntensity={0.3}>
       <group ref={ref}>
         <mesh>
-          <octahedronGeometry args={[1.2, 0]} />
+          <octahedronGeometry args={[0.9, 0]} />
           <MeshDistortMaterial
             color="#ffd700"
             emissive="#ffd700"
@@ -69,8 +69,8 @@ function SpinningTrophy() {
           return (
             <mesh
               key={i}
-              position={[Math.cos(angle) * 2, Math.sin(i * 0.7) * 0.5, Math.sin(angle) * 2]}
-              scale={0.15}
+              position={[Math.cos(angle) * 1.4, Math.sin(i * 0.7) * 0.4, Math.sin(angle) * 1.4]}
+              scale={0.12}
             >
               <sphereGeometry />
               <meshStandardMaterial
@@ -123,7 +123,7 @@ export default function Achievements() {
             transition={{ duration: 0.8, delay: 0.2, type: 'spring' }}
             className="h-72 hidden lg:block"
           >
-            <Canvas camera={{ position: [0, 0, 6], fov: 45 }}>
+            <Canvas camera={{ position: [0, 0, 10], fov: 50 }}>
               <Suspense fallback={null}>
                 <ambientLight intensity={0.4} />
                 <pointLight position={[5, 5, 5]} intensity={1.5} color="#ffd700" />

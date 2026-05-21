@@ -1,4 +1,4 @@
-import { useRef, Suspense, useMemo } from 'react'
+import { useRef, Suspense, useMemo, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Points, PointMaterial } from '@react-three/drei'
 import * as random from 'maath/random/dist/maath-random.esm'
@@ -10,9 +10,35 @@ function StarField() {
     []
   )
 
+  // Accumulated auto-rotation
+  const autoRot = useRef({ x: 0, y: 0 })
+  // Current smoothed mouse offset
+  const mouseOffset = useRef({ x: 0, y: 0 })
+  // Raw mouse target
+  const mouseTarget = useRef({ x: 0, y: 0 })
+
+  useEffect(() => {
+    const onMove = (e) => {
+      // Normalize to -0.5 .. 0.5 then scale
+      mouseTarget.current.x = (e.clientX / window.innerWidth - 0.5) * 0.6
+      mouseTarget.current.y = (e.clientY / window.innerHeight - 0.5) * 0.4
+    }
+    window.addEventListener('mousemove', onMove)
+    return () => window.removeEventListener('mousemove', onMove)
+  }, [])
+
   useFrame((state, delta) => {
-    ref.current.rotation.x -= delta / 20
-    ref.current.rotation.y -= delta / 30
+    // Base slow drift
+    autoRot.current.x -= delta / 20
+    autoRot.current.y -= delta / 30
+
+    // Smoothly lerp mouse offset (easing factor 0.04 = gentle lag)
+    mouseOffset.current.x += (mouseTarget.current.x - mouseOffset.current.x) * 0.04
+    mouseOffset.current.y += (mouseTarget.current.y - mouseOffset.current.y) * 0.04
+
+    // Combine: auto-drift + mouse parallax
+    ref.current.rotation.x = autoRot.current.x + mouseOffset.current.y
+    ref.current.rotation.y = autoRot.current.y + mouseOffset.current.x
   })
 
   return (

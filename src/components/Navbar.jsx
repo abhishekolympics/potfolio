@@ -1,90 +1,109 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
+import { SECTION_DATA } from './GalaxyScene'
 
-const links = [
-  { label: 'About', href: '#about' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Experience', href: '#experience' },
-  { label: 'Achievements', href: '#achievements' },
-  { label: 'Contact', href: '#contact' },
+const NAV_LINKS = [
+  { label: 'About',        index: 1 },
+  { label: 'Skills',       index: 2 },
+  { label: 'Experience',   index: 3 },
+  { label: 'Achievements', index: 4 },
+  { label: 'Contact',      index: 5 },
 ]
 
-export default function Navbar({ scrolled }) {
+export default function Navbar({ currentSection, onNavigate }) {
   const [open, setOpen] = useState(false)
+  const color = SECTION_DATA[currentSection].color
 
   return (
     <motion.nav
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'glass border-b border-white/5 py-3' : 'py-5'
-      }`}
+      className="fixed top-0 left-0 right-0 z-50 py-4"
+      style={{
+        background: 'rgba(5,8,22,0.6)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        borderBottom: `1px solid ${color}18`,
+        transition: 'border-color 0.8s ease',
+      }}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <motion.a
-          href="#"
+        {/* Logo */}
+        <motion.button
+          onClick={() => onNavigate(0)}
           className="text-xl font-black shimmer-text"
           whileHover={{ scale: 1.05 }}
         >
           AKS
-        </motion.a>
+        </motion.button>
 
-        <ul className="hidden md:flex items-center gap-8">
-          {links.map((link) => (
-            <li key={link.href}>
-              <a
-                href={link.href}
-                className="text-sm text-gray-400 hover:text-white transition-colors duration-200 relative group"
+        {/* Desktop links */}
+        <ul className="hidden md:flex items-center gap-7">
+          {NAV_LINKS.map((link) => (
+            <li key={link.index}>
+              <button
+                onClick={() => onNavigate(link.index)}
+                className="text-sm transition-colors duration-200 relative group"
+                style={{ color: currentSection === link.index ? color : '#9ca3af' }}
               >
                 {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-cyan-400 to-purple-500 group-hover:w-full transition-all duration-300" />
-              </a>
+                <span
+                  className="absolute -bottom-1 left-0 h-px transition-all duration-300"
+                  style={{
+                    width: currentSection === link.index ? '100%' : '0%',
+                    background: color,
+                  }}
+                />
+              </button>
             </li>
           ))}
         </ul>
 
+        {/* Resume CTA */}
         <a
           href="https://drive.google.com/file/d/1Cn_a86TjdqfaQLHMjLN3qen_t0y2pS21/view"
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg border border-cyan-400/40 text-cyan-400 text-sm font-medium hover:bg-cyan-400/10 transition-all duration-200 hover:border-cyan-400"
+          className="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-lg border text-sm font-medium transition-all duration-200"
+          style={{ borderColor: `${color}50`, color: color }}
         >
           Resume
         </a>
 
+        {/* Mobile burger */}
         <button className="md:hidden text-white" onClick={() => setOpen(!open)}>
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
+      {/* Mobile menu */}
       <AnimatePresence>
         {open && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass border-t border-white/5"
+            className="md:hidden border-t border-white/5"
+            style={{ background: 'rgba(5,8,22,0.95)' }}
           >
-            <ul className="flex flex-col p-6 gap-4">
-              {links.map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    className="text-gray-300 hover:text-white text-lg"
-                    onClick={() => setOpen(false)}
+            <ul className="flex flex-col p-5 gap-4">
+              {NAV_LINKS.map((link) => (
+                <li key={link.index}>
+                  <button
+                    onClick={() => { onNavigate(link.index); setOpen(false) }}
+                    className="text-gray-300 hover:text-white text-base transition-colors"
                   >
                     {link.label}
-                  </a>
+                  </button>
                 </li>
               ))}
               <li>
                 <a
                   href="https://drive.google.com/file/d/1Cn_a86TjdqfaQLHMjLN3qen_t0y2pS21/view"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex text-cyan-400 border border-cyan-400/40 px-4 py-2 rounded-lg text-sm"
+                  target="_blank" rel="noopener noreferrer"
+                  className="inline-flex text-sm px-4 py-2 rounded-lg border border-white/20 text-gray-300"
                 >
                   Resume
                 </a>
