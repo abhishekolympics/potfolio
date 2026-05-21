@@ -39,9 +39,9 @@ function ExperienceCard({ exp, index, inView }) {
   const isLeft = index % 2 === 0
 
   return (
-    <div className={`relative flex items-start gap-8 mb-16 ${isLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'}`}>
+    <div className={`relative flex flex-col md:flex-row items-start gap-4 md:gap-8 mb-12 md:mb-16 ${isLeft ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
       {/* Timeline dot */}
-      <div className="hidden lg:flex flex-col items-center flex-shrink-0">
+      <div className="hidden md:flex flex-col items-center flex-shrink-0">
         <motion.div
           initial={{ scale: 0, opacity: 0 }}
           animate={inView ? { scale: 1, opacity: 1 } : {}}
@@ -71,13 +71,13 @@ function ExperienceCard({ exp, index, inView }) {
         initial={{ opacity: 0, x: isLeft ? -40 : 40 }}
         animate={inView ? { opacity: 1, x: 0 } : {}}
         transition={{ duration: 0.6, delay: index * 0.2 + 0.1 }}
-        className="flex-1 glass rounded-2xl p-7 hover:scale-[1.01] transition-all duration-300"
+        className="flex-1 glass rounded-2xl p-5 md:p-7 hover:scale-[1.01] transition-all duration-300 text-sm md:text-base"
         style={{ borderColor: `${exp.color}20` }}
       >
-        <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 md:gap-4 mb-4 md:mb-6">
           <div>
-            <h3 className="text-2xl font-black text-white mb-1">{exp.company}</h3>
-            <p className="font-semibold" style={{ color: exp.color }}>{exp.role}</p>
+            <h3 className="text-lg md:text-2xl font-black text-white mb-1">{exp.company}</h3>
+            <p className="font-semibold text-sm md:text-base" style={{ color: exp.color }}>{exp.role}</p>
           </div>
           <div className="flex flex-col items-end gap-1 text-right">
             <span className="flex items-center gap-2 text-gray-400 text-sm">
@@ -124,7 +124,7 @@ export default function Experience() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.05 })
 
   return (
-    <section id="experience" className="relative py-24 px-6" ref={ref}>
+    <section id="experience" className="relative py-16 sm:py-24 px-4 sm:px-6" ref={ref}>
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent" />
 
       <div className="max-w-5xl mx-auto">
@@ -135,7 +135,7 @@ export default function Experience() {
           className="text-center mb-16"
         >
           <p className="text-cyan-400 text-sm font-semibold tracking-widest uppercase mb-3">Where I've Worked</p>
-          <h2 className="text-4xl md:text-5xl font-black">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black">
             Work <span className="gradient-text">Experience</span>
           </h2>
         </motion.div>

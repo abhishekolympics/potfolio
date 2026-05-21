@@ -109,7 +109,7 @@ export default function Skills() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
 
   return (
-    <section id="skills" className="relative py-24 px-6" ref={ref}>
+    <section id="skills" className="relative py-16 sm:py-24 px-4 sm:px-6" ref={ref}>
       {/* Background glow */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div className="w-[600px] h-[600px] rounded-full bg-purple-500/5 blur-3xl" />
@@ -123,7 +123,7 @@ export default function Skills() {
           className="text-center mb-16"
         >
           <p className="text-purple-400 text-sm font-semibold tracking-widest uppercase mb-3">What I Work With</p>
-          <h2 className="text-4xl md:text-5xl font-black">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black">
             Tech <span className="gradient-text">Stack</span>
           </h2>
         </motion.div>
@@ -133,7 +133,7 @@ export default function Skills() {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={inView ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="h-80 mb-16 relative"
+          className="h-48 sm:h-64 md:h-80 mb-12 md:mb-16 relative hidden sm:block"
         >
           <Canvas camera={{ position: [0, 0, 10], fov: 55 }}>
             <Suspense fallback={null}>
@@ -144,7 +144,7 @@ export default function Skills() {
         </motion.div>
 
         {/* Skill category cards */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {skillGroups.map((group, gi) => (
             <motion.div
               key={group.category}
