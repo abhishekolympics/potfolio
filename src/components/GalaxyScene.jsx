@@ -14,6 +14,33 @@ const PLANET_TEXTURES = {
 
 const SATURN_RING_TEXTURE = '/textures/planets/saturn-ring.png'
 
+export const PROJECTS = [
+  {
+    title: 'EventBridge Payments Core',
+    short: 'PAYMENTS',
+    description: 'Serverless event-driven payment workflows with AWS Lambda, EventBridge, replay-safe webhooks, and operational dashboards.',
+    tags: ['AWS Lambda', 'EventBridge', 'Node.js', 'Webhooks'],
+    color: '#00f0ff',
+    github: 'https://github.com/abhishekolympics',
+  },
+  {
+    title: 'Admin Mission Console',
+    short: 'ADMIN UI',
+    description: 'React and AgGrid admin surfaces built for fast investigation, clean operations, and lower support effort.',
+    tags: ['React', 'AgGrid', 'TypeScript', 'Dashboards'],
+    color: '#915eff',
+    github: 'https://github.com/abhishekolympics',
+  },
+  {
+    title: 'CMS Delivery Engine',
+    short: 'CMS',
+    description: 'Gatsby CMS pipelines and MERN APIs focused on faster content delivery and a smoother multilingual product experience.',
+    tags: ['Gatsby', 'MERN', 'REST', 'i18n'],
+    color: '#ff6b9d',
+    github: 'https://github.com/abhishekolympics',
+  },
+]
+
 // Content side describes the overlay. The planet is placed on the opposite side.
 // The x/y/z positions are intentionally scattered, so navigation feels like
 // steering through a solar-system map rather than travelling down a hallway.
@@ -64,7 +91,7 @@ function getDotTexture() {
   return dotTexture
 }
 
-function Stars() {
+function Stars({ motionEnabled }) {
   const tunnelRef = useRef()
   const bgRef = useRef()
   const bgMatRef = useRef()
@@ -129,13 +156,14 @@ function Stars() {
   }, [])
 
   useFrame((_, delta) => {
-    mouseOffset.current.x += (mouseTarget.current.x - mouseOffset.current.x) * 0.045
-    mouseOffset.current.y += (mouseTarget.current.y - mouseOffset.current.y) * 0.045
+    const mouseLerp = motionEnabled ? 0.045 : 0.015
+    mouseOffset.current.x += (mouseTarget.current.x - mouseOffset.current.x) * mouseLerp
+    mouseOffset.current.y += (mouseTarget.current.y - mouseOffset.current.y) * mouseLerp
     timeRef.current += delta
 
     if (tunnelRef.current) {
-      tunnelRef.current.rotation.z += delta * 0.006
-      tunnelRef.current.rotation.x = Math.sin(timeRef.current * 0.08) * 0.035
+      tunnelRef.current.rotation.z += delta * (motionEnabled ? 0.006 : 0.0018)
+      tunnelRef.current.rotation.x = Math.sin(timeRef.current * 0.08) * (motionEnabled ? 0.035 : 0.01)
     }
 
     if (bgRef.current) {
@@ -262,7 +290,54 @@ function SaturnRing({ radius, isActive }) {
   )
 }
 
-function Planet({ data, isActive }) {
+function ProjectSatellites({ planet, isActive, onProjectSelect }) {
+  const groupRef = useRef()
+
+  useFrame(({ clock }) => {
+    if (!groupRef.current) return
+    groupRef.current.rotation.y = clock.getElapsedTime() * 0.22
+    groupRef.current.rotation.z = Math.sin(clock.getElapsedTime() * 0.35) * 0.08
+  })
+
+  if (!isActive || !onProjectSelect) return null
+
+  return (
+    <group ref={groupRef}>
+      {PROJECTS.map((project, index) => {
+        const angle = (index / PROJECTS.length) * Math.PI * 2
+        const radius = planet.r * 2.15
+        const y = Math.sin(angle * 1.7) * 0.9
+        return (
+          <group key={project.title} position={[Math.cos(angle) * radius, y, Math.sin(angle) * radius]}>
+            <mesh>
+              <sphereGeometry args={[0.18, 24, 24]} />
+              <meshBasicMaterial color={project.color} />
+            </mesh>
+            <mesh scale={2.8}>
+              <sphereGeometry args={[0.18, 16, 16]} />
+              <meshBasicMaterial color={project.color} transparent opacity={0.12} depthWrite={false} />
+            </mesh>
+            <Html center distanceFactor={8} zIndexRange={[18, 0]}>
+              <button
+                className="project-satellite"
+                style={{ '--satellite-color': project.color }}
+                onClick={(event) => {
+                  event.stopPropagation()
+                  onProjectSelect(project)
+                }}
+              >
+                <span />
+                {project.short}
+              </button>
+            </Html>
+          </group>
+        )
+      })}
+    </group>
+  )
+}
+
+function Planet({ data, isActive, onProjectSelect }) {
   const coreRef = useRef()
   const glowRef = useRef()
   const texture = useTexture(PLANET_TEXTURES[data.tex])
@@ -322,20 +397,27 @@ function Planet({ data, isActive }) {
       </mesh>
 
       <PlanetLabel data={data} isActive={isActive} />
+      {data.label === 'SKILLS' && (
+        <ProjectSatellites planet={data} isActive={isActive} onProjectSelect={onProjectSelect} />
+      )}
     </group>
   )
 }
 
-function CameraRig({ currentSection }) {
+function CameraRig({ currentSection, motionEnabled }) {
   const { camera } = useThree()
   const lookAt = useRef(new THREE.Vector3())
   const target = useRef(new THREE.Vector3())
+  const lastX = useRef(camera.position.x)
+  const bank = useRef(0)
 
   useFrame((_, delta) => {
     const planet = SECTION_DATA[currentSection]
     const stop = CAM_STOPS[currentSection]
     const distance = Math.abs(camera.position.z - stop.z)
-    const travel = Math.min(delta * (distance > 35 ? 2.7 : 1.45), 0.12)
+    const travel = motionEnabled
+      ? Math.min(delta * (distance > 35 ? 2.85 : 1.55), 0.13)
+      : Math.min(delta * 1.35, 0.08)
 
     camera.position.x += (stop.x - camera.position.x) * travel
     camera.position.y += (stop.y - camera.position.y) * travel
@@ -343,11 +425,17 @@ function CameraRig({ currentSection }) {
 
     // Look slightly inward from the planet rather than directly at it. This keeps
     // the planet on its side of the screen while still making the trip feel steered.
-    target.current.set(planet.x * 0.38, planet.y * 0.34, planet.z - 20)
-    lookAt.current.lerp(target.current, Math.min(delta * 1.8, 0.12))
+    const sway = motionEnabled ? Math.sin(camera.position.z * 0.025) * 2.2 : 0
+    target.current.set(planet.x * 0.38 + sway, planet.y * 0.34, planet.z - 20)
+    lookAt.current.lerp(target.current, Math.min(delta * (motionEnabled ? 2.05 : 1.2), 0.12))
     camera.lookAt(lookAt.current)
 
-    const targetFov = distance > 8 ? 84 : 58
+    const velocityX = (camera.position.x - lastX.current) / Math.max(delta, 0.016)
+    lastX.current = camera.position.x
+    bank.current += (((motionEnabled ? -velocityX * 0.018 : 0) - bank.current) * 0.08)
+    camera.rotation.z += bank.current
+
+    const targetFov = distance > 8 ? (motionEnabled ? 86 : 66) : 58
     camera.fov += (targetFov - camera.fov) * 0.055
     camera.updateProjectionMatrix()
   })
@@ -376,19 +464,57 @@ function Lights({ currentSection }) {
   )
 }
 
-export default function GalaxyScene({ currentSection }) {
+export default function GalaxyScene({ currentSection, motionEnabled = true, onProjectSelect }) {
   return (
     <div className="fixed inset-0 z-0">
       <Canvas camera={{ position: [0, 0, 14], fov: 58, near: 0.1, far: 1400 }} dpr={[1, 1.75]}>
         <Suspense fallback={null}>
-          <Stars />
+          <Stars motionEnabled={motionEnabled} />
           {SECTION_DATA.map((data, index) => (
-            <Planet key={data.label} data={data} isActive={currentSection === index} />
+            <Planet
+              key={data.label}
+              data={data}
+              isActive={currentSection === index}
+              onProjectSelect={onProjectSelect}
+            />
           ))}
           <Lights currentSection={currentSection} />
-          <CameraRig currentSection={currentSection} />
+          <CameraRig currentSection={currentSection} motionEnabled={motionEnabled} />
         </Suspense>
       </Canvas>
+      <style>{`
+        .project-satellite {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          border: 1px solid color-mix(in srgb, var(--satellite-color), transparent 45%);
+          border-radius: 999px;
+          padding: 0.38rem 0.58rem;
+          background: rgba(3,6,20,0.72);
+          color: var(--satellite-color);
+          font-family: "Orbitron", monospace;
+          font-size: 0.68rem;
+          font-weight: 900;
+          letter-spacing: 0.08em;
+          box-shadow: 0 0 22px color-mix(in srgb, var(--satellite-color), transparent 72%);
+          backdrop-filter: blur(10px);
+          transform: translateZ(0);
+          transition: transform 160ms ease, background 160ms ease;
+          cursor: pointer;
+          white-space: nowrap;
+        }
+        .project-satellite:hover {
+          transform: scale(1.08);
+          background: rgba(3,6,20,0.95);
+        }
+        .project-satellite span {
+          width: 0.42rem;
+          height: 0.42rem;
+          border-radius: 999px;
+          background: var(--satellite-color);
+          box-shadow: 0 0 12px var(--satellite-color);
+        }
+      `}</style>
     </div>
   )
 }

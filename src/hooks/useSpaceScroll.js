@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 const TOTAL = 6
 const COOLDOWN = 1400
 
-export function useSpaceScroll() {
+export function useSpaceScroll({ enabled = true } = {}) {
   const [current, setCurrent] = useState(0)
   const [transitioning, setTransitioning] = useState(false)
   const cooldown = useRef(false)
@@ -26,6 +26,8 @@ export function useSpaceScroll() {
   const move = useCallback((dir) => navigate(currentRef.current + dir), [navigate])
 
   useEffect(() => {
+    if (!enabled) return undefined
+
     const onWheel = (e) => { e.preventDefault(); move(e.deltaY > 0 ? 1 : -1) }
     const onKey = (e) => {
       if (e.key === 'ArrowDown' || e.key === 'PageDown') move(1)
@@ -50,7 +52,7 @@ export function useSpaceScroll() {
       window.removeEventListener('touchend',   onTouchEnd)
       clearTimeout(timer.current)
     }
-  }, [move])
+  }, [enabled, move])
 
   return { current, navigate, transitioning }
 }

@@ -4,7 +4,7 @@ import { TypeAnimation } from 'react-type-animation'
 import {
   Github, Linkedin, Mail, Phone, FileText,
   Trophy, Medal, Star, Code2, Server, Cloud, Cpu,
-  Copy, Check, ExternalLink, Calendar,
+  Copy, Check, ExternalLink, Calendar, Gamepad2, Radio,
 } from 'lucide-react'
 import { SECTION_DATA } from './GalaxyScene'
 
@@ -160,11 +160,19 @@ const SKILL_GROUPS = [
   { cat: 'AI Tools',  color: '#ff8c00', skills: ['Claude Code', 'Cursor', 'Codex'] },
 ]
 
-function SkillsContent({ color }) {
+function SkillsContent({ color, onLaunchGame }) {
   return (
     <div className="mission-stack">
       <MissionHeader color={color} code="SYSTEMS MATRIX" title="Tech Arsenal" />
       <p className="mission-copy">Technologies I work with daily across the full stack.</p>
+      <button
+        className="mission-game-button"
+        style={{ borderColor: `${color}45`, color, boxShadow: `0 0 28px ${color}18` }}
+        onClick={onLaunchGame}
+      >
+        <Gamepad2 size={17} />
+        Launch Asteroid Dodger
+      </button>
       <div className="mission-skill-grid">
         {SKILL_GROUPS.map(g => (
           <div key={g.cat} className="mission-skill-row" style={{ borderColor: `${g.color}22`, background: `${g.color}08` }}>
@@ -338,6 +346,7 @@ const CONTACT_LINKS = [
 
 function ContactContent({ color }) {
   const [copiedLabel, setCopiedLabel] = useState(null)
+  const [transmission, setTransmission] = useState(null)
 
   const copyText = useCallback(async (text, label) => {
     try {
@@ -352,13 +361,35 @@ function ContactContent({ color }) {
       document.body.removeChild(ta)
     }
     setCopiedLabel(label)
+    setTransmission({ label, mode: 'copied' })
     setTimeout(() => setCopiedLabel(l => l === label ? null : l), 2500)
+    setTimeout(() => setTransmission(t => t?.label === label ? null : t), 1700)
+  }, [])
+
+  const markOpened = useCallback((label) => {
+    setTransmission({ label, mode: 'opened' })
+    setTimeout(() => setTransmission(t => t?.label === label ? null : t), 1500)
   }, [])
 
   return (
     <div className="mission-stack">
       <MissionHeader color={color} code="TRANSMISSION BAY" title="Contact Links" />
       <p className="mission-copy">Open to new opportunities. Let's build something great together.</p>
+      <AnimatePresence>
+        {transmission && (
+          <motion.div
+            className="mission-transmission"
+            initial={{ opacity: 0, y: 10, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.98 }}
+            style={{ borderColor: `${color}45`, color }}
+          >
+            <Radio size={16} />
+            {transmission.mode === 'copied' ? `${transmission.label} signal copied` : `${transmission.label} channel opened`}
+            <span />
+          </motion.div>
+        )}
+      </AnimatePresence>
       <div className="mission-contact-grid">
         {CONTACT_LINKS.map(l => (
           <div
@@ -400,6 +431,7 @@ function ContactContent({ color }) {
                 title={`Open ${l.label}`}
                 className="mission-action-button"
                 style={{ background: `${l.color}12` }}
+                onClick={() => markOpened(l.label)}
               >
                 <ExternalLink size={13} />
               </a>
@@ -420,7 +452,7 @@ const CONTENT_COMPONENTS = [
 
 // ── Main Overlay ───────────────────────────────────────────────────────────────
 
-export default function SectionOverlay({ current, navigate }) {
+export default function SectionOverlay({ current, navigate, onLaunchGame }) {
   const data    = SECTION_DATA[current]
   const color   = data.color
   const isLeft  = data.side === 'left'   // content on left half
@@ -611,6 +643,26 @@ export default function SectionOverlay({ current, navigate }) {
           display: grid;
           gap: 0.7rem;
         }
+        .mission-game-button {
+          width: fit-content;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.55rem;
+          border: 1px solid;
+          border-radius: 0.9rem;
+          padding: 0.72rem 0.9rem;
+          background: rgba(3,6,20,0.5);
+          font-family: "Orbitron", monospace;
+          font-size: 0.78rem;
+          font-weight: 900;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          transition: transform 160ms ease, background 160ms ease;
+        }
+        .mission-game-button:hover {
+          transform: translateY(-2px);
+          background: rgba(255,255,255,0.055);
+        }
         .mission-skill-row {
           display: grid;
           grid-template-columns: 7.5rem 1fr;
@@ -743,6 +795,33 @@ export default function SectionOverlay({ current, navigate }) {
           display: grid;
           gap: 0.7rem;
         }
+        .mission-transmission {
+          position: relative;
+          display: flex;
+          align-items: center;
+          gap: 0.55rem;
+          overflow: hidden;
+          border: 1px solid;
+          border-radius: 0.95rem;
+          padding: 0.7rem 0.85rem;
+          background: rgba(3,6,20,0.58);
+          font-family: "Orbitron", monospace;
+          font-size: 0.76rem;
+          font-weight: 900;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          box-shadow: 0 0 34px rgba(255,201,154,0.16);
+        }
+        .mission-transmission span {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+          transform: translateX(-100%);
+          animation: transmissionSweep 1.2s ease-out infinite;
+        }
+        @keyframes transmissionSweep {
+          to { transform: translateX(100%); }
+        }
         .mission-contact-row {
           display: flex;
           align-items: center;
@@ -823,7 +902,7 @@ export default function SectionOverlay({ current, navigate }) {
           exit={{ opacity: 0, x: isLeft ? -30 : 30, transition: { duration: 0.2 } }}
         >
           <div className="panel-inner">
-            <Content color={color} navigate={navigate} />
+            <Content color={color} navigate={navigate} onLaunchGame={onLaunchGame} />
           </div>
         </motion.div>
       </AnimatePresence>
