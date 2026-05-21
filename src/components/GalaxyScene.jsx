@@ -239,7 +239,7 @@ function PlanetLabel({ data, isActive }) {
         <div
           style={{
             fontFamily: '"Orbitron", monospace',
-            fontSize: data.label.length > 9 ? '2.15rem' : '2.75rem',
+              fontSize: data.label.length > 9 ? 'clamp(1.35rem, 6vw, 2.15rem)' : 'clamp(1.65rem, 8vw, 2.75rem)',
             fontWeight: 900,
             letterSpacing: '0.16em',
             color: data.color,
@@ -252,7 +252,7 @@ function PlanetLabel({ data, isActive }) {
           <div
             style={{
               fontFamily: '"Exo 2", sans-serif',
-              fontSize: '0.86rem',
+                fontSize: 'clamp(0.58rem, 2.6vw, 0.86rem)',
               fontWeight: 700,
               letterSpacing: '0.32em',
               color: `${data.color}cc`,
@@ -412,6 +412,7 @@ function CameraRig({ currentSection, motionEnabled }) {
   const bank = useRef(0)
 
   useFrame((_, delta) => {
+    const isMobile = window.innerWidth <= 768
     const planet = SECTION_DATA[currentSection]
     const stop = CAM_STOPS[currentSection]
     const distance = Math.abs(camera.position.z - stop.z)
@@ -419,14 +420,22 @@ function CameraRig({ currentSection, motionEnabled }) {
       ? Math.min(delta * (distance > 35 ? 2.85 : 1.55), 0.13)
       : Math.min(delta * 1.35, 0.08)
 
-    camera.position.x += (stop.x - camera.position.x) * travel
-    camera.position.y += (stop.y - camera.position.y) * travel
-    camera.position.z += (stop.z - camera.position.z) * travel
+    const targetCamX = isMobile ? planet.x * 0.88 : stop.x
+    const targetCamY = isMobile ? planet.y * 0.9 + 0.8 : stop.y
+    const targetCamZ = isMobile ? planet.z + 18 : stop.z
+
+    camera.position.x += (targetCamX - camera.position.x) * travel
+    camera.position.y += (targetCamY - camera.position.y) * travel
+    camera.position.z += (targetCamZ - camera.position.z) * travel
 
     // Look slightly inward from the planet rather than directly at it. This keeps
     // the planet on its side of the screen while still making the trip feel steered.
-    const sway = motionEnabled ? Math.sin(camera.position.z * 0.025) * 2.2 : 0
-    target.current.set(planet.x * 0.38 + sway, planet.y * 0.34, planet.z - 20)
+    const sway = motionEnabled && !isMobile ? Math.sin(camera.position.z * 0.025) * 2.2 : 0
+    if (isMobile) {
+      target.current.set(planet.x * 0.9, planet.y - 2.15, planet.z - 18)
+    } else {
+      target.current.set(planet.x * 0.38 + sway, planet.y * 0.34, planet.z - 20)
+    }
     lookAt.current.lerp(target.current, Math.min(delta * (motionEnabled ? 2.05 : 1.2), 0.12))
     camera.lookAt(lookAt.current)
 
@@ -435,7 +444,7 @@ function CameraRig({ currentSection, motionEnabled }) {
     bank.current += (((motionEnabled ? -velocityX * 0.018 : 0) - bank.current) * 0.08)
     camera.rotation.z += bank.current
 
-    const targetFov = distance > 8 ? (motionEnabled ? 86 : 66) : 58
+    const targetFov = isMobile ? (distance > 8 ? 72 : 64) : (distance > 8 ? (motionEnabled ? 86 : 66) : 58)
     camera.fov += (targetFov - camera.fov) * 0.055
     camera.updateProjectionMatrix()
   })

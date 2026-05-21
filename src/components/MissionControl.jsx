@@ -178,8 +178,18 @@ export default function MissionControl({
           box-shadow: 0 0 40px rgba(107,216,255,0.28);
         }
         @media (max-width: 768px) {
+          .fixed.top-20.right-6 {
+            top: 4.7rem !important;
+            right: 0.65rem !important;
+          }
           .mission-toggle span { display: none; }
           .mission-toggle { width: 2.35rem; height: 2.35rem; justify-content: center; padding: 0; }
+          .mission-intro {
+            padding: 1.25rem;
+          }
+          .mission-intro p {
+            font-size: 0.96rem;
+          }
         }
       `}</style>
     </>

@@ -4,7 +4,7 @@ import { SECTION_DATA } from './GalaxyScene'
 
 export default function NavigationDots({ current, navigate }) {
   return (
-    <div className="fixed right-5 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center gap-2.5">
+    <div className="nav-dots fixed right-5 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center gap-2.5">
       {/* Up arrow */}
       <motion.button
         onClick={() => navigate(current - 1)}
@@ -55,6 +55,27 @@ export default function NavigationDots({ current, navigate }) {
       >
         <ChevronDown size={16} />
       </motion.button>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .nav-dots {
+            top: 4.85rem !important;
+            left: 50% !important;
+            right: auto !important;
+            transform: translateX(-50%) !important;
+            flex-direction: row !important;
+            gap: 0.65rem !important;
+            padding: 0.45rem 0.6rem;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 999px;
+            background: rgba(3,6,20,0.46);
+            backdrop-filter: blur(14px);
+          }
+          .nav-dots span {
+            display: none;
+          }
+        }
+      `}</style>
     </div>
   )
 }

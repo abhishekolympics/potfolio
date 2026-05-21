@@ -7,6 +7,7 @@ import Navbar from './components/Navbar'
 import MissionControl from './components/MissionControl'
 import ProjectModal from './components/ProjectModal'
 import AsteroidDodger from './components/AsteroidDodger'
+import SceneBoundary from './components/SceneBoundary'
 
 export default function App() {
   const [showIntro, setShowIntro] = useState(() => !localStorage.getItem('mission-intro-seen'))
@@ -60,11 +61,13 @@ export default function App() {
 
   return (
     <div style={{ height: '100dvh', overflow: 'hidden', position: 'relative', background: '#030614' }}>
-      <GalaxyScene
-        currentSection={current}
-        motionEnabled={motionEnabled}
-        onProjectSelect={setSelectedProject}
-      />
+      <SceneBoundary>
+        <GalaxyScene
+          currentSection={current}
+          motionEnabled={motionEnabled}
+          onProjectSelect={setSelectedProject}
+        />
+      </SceneBoundary>
       <Navbar currentSection={current} onNavigate={navigate} />
       <SectionOverlay current={current} navigate={navigate} onLaunchGame={() => setGameOpen(true)} />
       <NavigationDots current={current} navigate={navigate} />

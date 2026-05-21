@@ -866,27 +866,68 @@ export default function SectionOverlay({ current, navigate, onLaunchGame }) {
             left: 0 !important; right: 0 !important;
             top: auto; bottom: 0;
             width: 100% !important;
-            height: 62vh;
+            height: 58vh;
             justify-content: flex-start;
+            z-index: 30;
           }
           .panel-inner {
-            padding: 1.5rem 1.5rem 2rem !important;
+            padding: 1.15rem 1.2rem 1.4rem !important;
             overflow-y: auto;
             height: 100%;
           }
+          .mission-stack {
+            gap: 0.82rem;
+          }
+          .mission-title {
+            font-size: clamp(1.45rem, 8vw, 2.25rem);
+          }
+          .mission-code {
+            font-size: 0.62rem;
+          }
           .mission-headline {
-            font-size: clamp(2rem, 9vw, 3rem);
+            font-size: clamp(1.9rem, 9vw, 2.8rem);
           }
           .mission-copy {
+            font-size: 0.96rem;
+            line-height: 1.45;
+          }
+          .mission-copy.strong {
             font-size: 1rem;
+          }
+          .mission-type {
+            min-height: 1.45rem;
+            font-size: 0.86rem;
           }
           .mission-stat-grid,
           .mission-achievement-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
           }
+          .mission-stat {
+            padding: 0.72rem 0.55rem;
+          }
           .mission-skill-row {
             grid-template-columns: 1fr;
             gap: 0.55rem;
+            padding: 0.68rem 0.75rem;
+          }
+          .mission-card {
+            padding: 0.9rem;
+          }
+          .mission-bullets li {
+            font-size: 0.88rem;
+          }
+          .mission-achievement {
+            padding: 0.72rem;
+          }
+          .mission-contact-row {
+            padding: 0.72rem 0.78rem;
+          }
+          .mission-contact-value {
+            font-size: 0.96rem;
+          }
+          .mission-action-button {
+            width: 1.85rem;
+            height: 1.85rem;
           }
         }
       `}</style>
