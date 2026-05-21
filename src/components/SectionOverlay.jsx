@@ -15,11 +15,21 @@ const EMAIL = 'abhishek19980402@gmail.com'
 function Tag({ color, children }) {
   return (
     <span
-      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold"
-      style={{ background: `${color}15`, border: `1px solid ${color}30`, color }}
+      className="mission-chip"
+      style={{ background: `${color}14`, border: `1px solid ${color}38`, color, boxShadow: `0 0 18px ${color}12` }}
     >
       {children}
     </span>
+  )
+}
+
+function MissionHeader({ color, code, title }) {
+  return (
+    <div className="mission-header">
+      <div className="mission-code" style={{ color, textShadow: `0 0 18px ${color}90` }}>{code}</div>
+      <div className="mission-title">{title}</div>
+      <div className="mission-rule" style={{ background: `linear-gradient(90deg, ${color}, transparent)` }} />
+    </div>
   )
 }
 
@@ -27,31 +37,32 @@ function Tag({ color, children }) {
 
 function HomeContent({ color, navigate }) {
   return (
-    <div className="flex flex-col gap-5">
+    <div className="mission-stack">
+      <MissionHeader color={color} code="COMMAND DECK" title="Engineer Profile" />
       <div
-        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium w-fit"
-        style={{ border: `1px solid ${color}40`, color, background: `${color}08` }}
+        className="mission-status"
+        style={{ border: `1px solid ${color}45`, color, background: `${color}0d`, boxShadow: `0 0 24px ${color}16` }}
       >
         <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: color }} />
         Available for opportunities
       </div>
 
       <div>
-        <div className="text-white/40 text-xs font-semibold mb-2 tracking-widest uppercase" style={{ fontFamily: '"Exo 2", sans-serif' }}>Full Stack Software Engineer</div>
-        <div className="font-black leading-tight" style={{ fontFamily: '"Exo 2", sans-serif', fontSize: 'clamp(1.5rem, 2.4vw, 2.2rem)' }}>
+        <div className="mission-eyebrow">Full Stack Software Engineer</div>
+        <div className="mission-headline">
           Building systems <span style={{ color, textShadow: `0 0 20px ${color}80` }}>end-to-end</span>,<br />
           from APIs to polished UIs.
         </div>
       </div>
 
-      <div className="text-base font-semibold h-7" style={{ color }}>
+      <div className="mission-type" style={{ color }}>
         <TypeAnimation
           sequence={['Node.js · TypeScript', 2000, 'React · AWS Lambda', 2000, 'Event-driven systems', 2000, 'AI-augmented dev', 2000]}
           wrapper="span" speed={55} repeat={Infinity}
         />
       </div>
 
-      <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
+      <p className="mission-copy">
         3+ years building production-ready web applications. Obsessed with
         reliability, performance, and real customer impact.
       </p>
@@ -59,7 +70,7 @@ function HomeContent({ color, navigate }) {
       <div className="flex flex-wrap gap-3">
         <button
           onClick={() => navigate(5)}
-          className="px-5 py-2.5 rounded-xl font-semibold text-black text-sm hover:scale-105 transition-all shadow-lg"
+          className="mission-primary"
           style={{ background: `linear-gradient(135deg, ${color}, #915eff)` }}
         >
           Get In Touch
@@ -67,7 +78,7 @@ function HomeContent({ color, navigate }) {
         <a
           href="https://drive.google.com/file/d/1Cn_a86TjdqfaQLHMjLN3qen_t0y2pS21/view"
           target="_blank" rel="noopener noreferrer"
-          className="px-5 py-2.5 rounded-xl font-semibold text-white text-sm hover:scale-105 transition-all"
+          className="mission-secondary"
           style={{ border: `1px solid ${color}40`, background: `${color}08` }}
         >
           Resume
@@ -83,7 +94,7 @@ function HomeContent({ color, navigate }) {
           <a
             key={label} href={href} target="_blank" rel="noopener noreferrer"
             aria-label={label}
-            className="w-9 h-9 rounded-lg flex items-center justify-center text-gray-400 transition-all hover:scale-110"
+            className="mission-icon-link"
             style={{ border: `1px solid ${color}25`, background: `${color}08` }}
             onMouseEnter={e => e.currentTarget.style.color = color}
             onMouseLeave={e => e.currentTarget.style.color = ''}
@@ -107,22 +118,23 @@ function AboutContent({ color }) {
     { icon: Cpu,    label: 'AI-augmented' },
   ]
   return (
-    <div className="flex flex-col gap-5">
-      <p className="text-gray-200 text-sm leading-relaxed">
+    <div className="mission-stack">
+      <MissionHeader color={color} code="MISSION LOG" title="About Abhishek" />
+      <p className="mission-copy strong">
         Full Stack Engineer who enjoys owning systems end-to-end. At{' '}
         <span style={{ color }} className="font-semibold">Transfi</span>, designed event-driven
         microservices, built webhook integrations with replay protection, and shipped admin dashboards
         that cut operational effort by 50%.
       </p>
-      <p className="text-gray-400 text-sm leading-relaxed">
+      <p className="mission-copy">
         I thrive where <span className="text-white font-medium">ownership, reliability, and customer
         impact</span> matter most. Competitive programmer — Google CodeJam Round 2, ICPC Asia.
       </p>
-      <div className="grid grid-cols-4 gap-2">
+      <div className="mission-stat-grid">
         {stats.map(([v, l]) => (
-          <div key={l} className="rounded-xl p-3 text-center" style={{ background: `${color}10`, border: `1px solid ${color}20` }}>
-            <div className="text-xl font-black" style={{ color }}>{v}</div>
-            <div className="text-gray-500 text-xs mt-0.5">{l}</div>
+          <div key={l} className="mission-stat" style={{ background: `${color}10`, border: `1px solid ${color}28`, boxShadow: `inset 0 0 24px ${color}08` }}>
+            <div className="mission-stat-value" style={{ color, textShadow: `0 0 16px ${color}90` }}>{v}</div>
+            <div className="mission-stat-label">{l}</div>
           </div>
         ))}
       </div>
@@ -150,19 +162,20 @@ const SKILL_GROUPS = [
 
 function SkillsContent({ color }) {
   return (
-    <div className="flex flex-col gap-4">
-      <p className="text-gray-400 text-sm">Technologies I work with daily across the full stack.</p>
-      <div className="grid gap-3">
+    <div className="mission-stack">
+      <MissionHeader color={color} code="SYSTEMS MATRIX" title="Tech Arsenal" />
+      <p className="mission-copy">Technologies I work with daily across the full stack.</p>
+      <div className="mission-skill-grid">
         {SKILL_GROUPS.map(g => (
-          <div key={g.cat} className="flex items-start gap-3">
-            <span className="text-xs font-bold w-20 flex-shrink-0 pt-0.5 uppercase tracking-wide" style={{ color: g.color }}>
+          <div key={g.cat} className="mission-skill-row" style={{ borderColor: `${g.color}22`, background: `${g.color}08` }}>
+            <span className="mission-skill-cat" style={{ color: g.color, textShadow: `0 0 14px ${g.color}80` }}>
               {g.cat}
             </span>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-2">
               {g.skills.map(s => (
                 <span
                   key={s}
-                  className="px-2 py-0.5 rounded-md text-xs font-medium"
+                  className="mission-skill-chip"
                   style={{ background: `${g.color}12`, border: `1px solid ${g.color}28`, color: g.color }}
                 >
                   {s}
@@ -206,22 +219,23 @@ const JOBS = [
 
 function ExperienceContent({ color }) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="mission-stack">
+      <MissionHeader color={color} code="FLIGHT RECORD" title="Experience Trail" />
       {JOBS.map(j => (
-        <div key={j.company} className="rounded-xl p-4" style={{ background: `${j.color}08`, border: `1px solid ${j.color}20` }}>
+        <div key={j.company} className="mission-card" style={{ background: `${j.color}08`, border: `1px solid ${j.color}25`, boxShadow: `0 0 28px ${j.color}10` }}>
           <div className="flex justify-between items-start mb-2 gap-2 flex-wrap">
             <div>
-              <div className="font-black text-white">{j.company}</div>
-              <div className="text-xs font-semibold" style={{ color: j.color }}>{j.role}</div>
+              <div className="mission-card-title">{j.company}</div>
+              <div className="mission-card-subtitle" style={{ color: j.color }}>{j.role}</div>
             </div>
-            <span className="text-xs text-gray-500 flex items-center gap-1 whitespace-nowrap">
-              <Calendar size={10} />{j.period}
+            <span className="mission-date">
+              <Calendar size={12} />{j.period}
             </span>
           </div>
-          <ul className="space-y-1.5">
+          <ul className="mission-bullets">
             {j.bullets.map((b, i) => (
-              <li key={i} className="flex items-start gap-2 text-xs text-gray-400 leading-relaxed">
-                <span className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0" style={{ background: j.color }} />
+              <li key={i}>
+                <span style={{ background: j.color, boxShadow: `0 0 10px ${j.color}` }} />
                 {b}
               </li>
             ))}
@@ -247,37 +261,38 @@ const EDU = [
 
 function AchievementsContent({ color }) {
   return (
-    <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-2 gap-2">
+    <div className="mission-stack">
+      <MissionHeader color={color} code="ORBIT BADGES" title="Achievements" />
+      <div className="mission-achievement-grid">
         {ACHVS.map(a => (
           <div
             key={a.title}
-            className="rounded-xl p-3 flex items-center gap-3"
-            style={{ background: `${a.color}08`, border: `1px solid ${a.color}20` }}
+            className="mission-achievement"
+            style={{ background: `${a.color}08`, border: `1px solid ${a.color}25`, boxShadow: `0 0 20px ${a.color}0f` }}
           >
             <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+              className="mission-achievement-icon"
               style={{ background: `${a.color}18`, border: `1px solid ${a.color}30`, boxShadow: `0 0 10px ${a.color}30` }}
             >
-              <a.icon size={14} style={{ color: a.color }} />
+              <a.icon size={18} style={{ color: a.color }} />
             </div>
             <div>
-              <div className="text-white text-xs font-bold leading-tight">{a.title}</div>
-              <div className="text-xs" style={{ color: a.color }}>{a.sub}</div>
+              <div className="mission-achievement-title">{a.title}</div>
+              <div className="mission-achievement-sub" style={{ color: a.color }}>{a.sub}</div>
             </div>
           </div>
         ))}
       </div>
-      <div className="text-xs font-bold uppercase tracking-widest text-gray-600 mt-1">Education</div>
+      <div className="mission-section-label">Education</div>
       <div className="grid gap-2">
         {EDU.map(e => (
-          <div key={e.deg} className="rounded-xl p-3" style={{ background: `${e.color}08`, border: `1px solid ${e.color}18` }}>
+          <div key={e.deg} className="mission-education" style={{ background: `${e.color}08`, border: `1px solid ${e.color}22` }}>
             <div className="flex items-start justify-between gap-2">
               <div>
-                <div className="text-white text-xs font-bold">{e.deg}</div>
-                <div className="text-gray-500 text-xs">{e.inst}</div>
+                <div className="mission-education-degree">{e.deg}</div>
+                <div className="mission-education-inst">{e.inst}</div>
               </div>
-              <span className="text-xs font-semibold whitespace-nowrap" style={{ color: e.color }}>{e.period}</span>
+              <span className="mission-education-period" style={{ color: e.color }}>{e.period}</span>
             </div>
           </div>
         ))}
@@ -341,41 +356,41 @@ function ContactContent({ color }) {
   }, [])
 
   return (
-    <div className="flex flex-col gap-4">
-      <p className="text-gray-400 text-sm">Open to new opportunities. Let's build something great together.</p>
-      <div className="grid gap-2">
+    <div className="mission-stack">
+      <MissionHeader color={color} code="TRANSMISSION BAY" title="Contact Links" />
+      <p className="mission-copy">Open to new opportunities. Let's build something great together.</p>
+      <div className="mission-contact-grid">
         {CONTACT_LINKS.map(l => (
           <div
             key={l.label}
-            className="flex items-center gap-3 rounded-xl px-4 py-2.5 w-full transition-all hover:scale-[1.02]"
-            style={{ background: `${l.color}08`, border: `1px solid ${l.color}20` }}
+            className="mission-contact-row"
+            style={{ background: `${l.color}08`, border: `1px solid ${l.color}24`, boxShadow: `0 0 18px ${l.color}0d` }}
           >
             <div
-              className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
+              className="mission-contact-icon"
               style={{ background: `${l.color}18`, border: `1px solid ${l.color}30` }}
             >
-              <l.icon size={13} style={{ color: l.color }} />
+              <l.icon size={16} style={{ color: l.color }} />
             </div>
             <div className="min-w-0 flex-1">
-              <div className="text-gray-500 text-xs">{l.label}</div>
+              <div className="mission-contact-label">{l.label}</div>
               <div
-                className="text-xs font-semibold truncate transition-colors duration-300"
+                className="mission-contact-value"
                 style={{ color: copiedLabel === l.label ? '#00ff87' : l.color }}
               >
                 {copiedLabel === l.label ? '✓ Copied!' : l.value}
               </div>
             </div>
-            {/* Per-item action buttons */}
             <div className="flex items-center gap-1 flex-shrink-0">
               <button
                 onClick={() => copyText(l.copyValue, l.label)}
                 title={`Copy ${l.label}`}
-                className="w-6 h-6 rounded-md flex items-center justify-center text-gray-500 hover:text-white transition-colors"
+                className="mission-action-button"
                 style={{ background: `${l.color}12` }}
               >
                 {copiedLabel === l.label
-                  ? <Check size={11} style={{ color: '#00ff87' }} />
-                  : <Copy size={11} />
+                  ? <Check size={13} style={{ color: '#00ff87' }} />
+                  : <Copy size={13} />
                 }
               </button>
               <a
@@ -383,10 +398,10 @@ function ContactContent({ color }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 title={`Open ${l.label}`}
-                className="w-6 h-6 rounded-md flex items-center justify-center text-gray-500 hover:text-white transition-colors"
+                className="mission-action-button"
                 style={{ background: `${l.color}12` }}
               >
-                <ExternalLink size={11} />
+                <ExternalLink size={13} />
               </a>
             </div>
           </div>
@@ -422,7 +437,7 @@ export default function SectionOverlay({ current, navigate }) {
         .overlay-panel {
           position: fixed;
           top: 0; bottom: 0;
-          width: min(44%, 540px);
+          width: min(48%, 660px);
           display: flex;
           flex-direction: column;
           justify-content: center;
@@ -432,23 +447,367 @@ export default function SectionOverlay({ current, navigate }) {
         .overlay-panel.left  { left: 0; }
         .overlay-panel.right { right: 0; }
         .panel-inner {
-          padding: 5rem 2.5rem 3rem;
+          padding: 5.25rem 3.1rem 3rem;
         }
-        .overlay-panel.left  .panel-inner { padding-right: 3.5rem; }
-        .overlay-panel.right .panel-inner { padding-left: 3.5rem;  }
+        .overlay-panel.left  .panel-inner { padding-right: 4.2rem; }
+        .overlay-panel.right .panel-inner { padding-left: 4.2rem;  }
+
+        .mission-stack {
+          display: flex;
+          flex-direction: column;
+          gap: 1.1rem;
+          font-family: "Exo 2", system-ui, sans-serif;
+        }
+        .mission-header {
+          display: grid;
+          gap: 0.35rem;
+          margin-bottom: 0.15rem;
+        }
+        .mission-code {
+          font-family: "Orbitron", monospace;
+          font-size: clamp(0.72rem, 0.95vw, 0.9rem);
+          font-weight: 900;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+        }
+        .mission-title {
+          font-family: "Rajdhani", "Exo 2", sans-serif;
+          font-size: clamp(1.8rem, 2.8vw, 3rem);
+          line-height: 0.92;
+          font-weight: 700;
+          letter-spacing: 0.02em;
+          color: rgba(255,255,255,0.96);
+          text-shadow: 0 0 18px rgba(255,255,255,0.18);
+        }
+        .mission-rule {
+          width: min(18rem, 70%);
+          height: 2px;
+          border-radius: 999px;
+          opacity: 0.85;
+        }
+        .mission-status {
+          width: fit-content;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.55rem;
+          border-radius: 999px;
+          padding: 0.45rem 0.85rem;
+          font-family: "Orbitron", monospace;
+          font-size: 0.72rem;
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+        .mission-eyebrow {
+          margin-bottom: 0.55rem;
+          font-family: "Orbitron", monospace;
+          font-size: clamp(0.72rem, 0.9vw, 0.9rem);
+          font-weight: 900;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.48);
+        }
+        .mission-headline {
+          font-family: "Rajdhani", "Exo 2", sans-serif;
+          font-size: clamp(2.2rem, 3.8vw, 4.25rem);
+          line-height: 0.9;
+          font-weight: 700;
+          letter-spacing: 0.01em;
+          color: #fff;
+          text-wrap: balance;
+          text-shadow: 0 12px 34px rgba(0,0,0,0.55);
+        }
+        .mission-type {
+          min-height: 2rem;
+          font-family: "Orbitron", monospace;
+          font-size: clamp(0.95rem, 1.45vw, 1.35rem);
+          font-weight: 900;
+          letter-spacing: 0.05em;
+          text-shadow: 0 0 16px currentColor;
+        }
+        .mission-copy {
+          max-width: 34rem;
+          font-size: clamp(1.02rem, 1.34vw, 1.25rem);
+          line-height: 1.55;
+          font-weight: 500;
+          color: rgba(226,232,240,0.78);
+          text-shadow: 0 3px 18px rgba(0,0,0,0.42);
+        }
+        .mission-copy.strong {
+          color: rgba(248,250,252,0.92);
+          font-size: clamp(1.08rem, 1.45vw, 1.35rem);
+          font-weight: 600;
+        }
+        .mission-primary,
+        .mission-secondary {
+          border-radius: 0.9rem;
+          padding: 0.82rem 1.15rem;
+          font-family: "Orbitron", monospace;
+          font-size: 0.82rem;
+          font-weight: 900;
+          letter-spacing: 0.04em;
+          transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+        }
+        .mission-primary {
+          color: #050816;
+          box-shadow: 0 0 30px rgba(0,240,255,0.22);
+        }
+        .mission-secondary {
+          color: white;
+        }
+        .mission-primary:hover,
+        .mission-secondary:hover,
+        .mission-icon-link:hover,
+        .mission-contact-row:hover {
+          transform: translateY(-2px) scale(1.025);
+        }
+        .mission-icon-link {
+          width: 2.65rem;
+          height: 2.65rem;
+          border-radius: 0.85rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: rgba(203,213,225,0.72);
+          transition: transform 180ms ease, color 180ms ease, border-color 180ms ease;
+        }
+        .mission-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.45rem;
+          border-radius: 0.75rem;
+          padding: 0.42rem 0.72rem;
+          font-family: "Rajdhani", sans-serif;
+          font-size: 0.92rem;
+          font-weight: 700;
+          letter-spacing: 0.02em;
+        }
+        .mission-stat-grid {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 0.65rem;
+        }
+        .mission-stat {
+          border-radius: 1rem;
+          padding: 0.95rem 0.65rem;
+          text-align: center;
+          backdrop-filter: blur(14px);
+        }
+        .mission-stat-value {
+          font-family: "Orbitron", monospace;
+          font-size: clamp(1.15rem, 1.85vw, 1.65rem);
+          font-weight: 900;
+          line-height: 1;
+        }
+        .mission-stat-label {
+          margin-top: 0.45rem;
+          color: rgba(203,213,225,0.58);
+          font-family: "Rajdhani", sans-serif;
+          font-size: 0.88rem;
+          font-weight: 700;
+          line-height: 1.08;
+        }
+        .mission-skill-grid {
+          display: grid;
+          gap: 0.7rem;
+        }
+        .mission-skill-row {
+          display: grid;
+          grid-template-columns: 7.5rem 1fr;
+          gap: 0.9rem;
+          align-items: start;
+          border: 1px solid;
+          border-radius: 1rem;
+          padding: 0.8rem 0.9rem;
+          backdrop-filter: blur(12px);
+        }
+        .mission-skill-cat {
+          font-family: "Orbitron", monospace;
+          font-size: 0.78rem;
+          font-weight: 900;
+          letter-spacing: 0.09em;
+          text-transform: uppercase;
+          padding-top: 0.2rem;
+        }
+        .mission-skill-chip {
+          border-radius: 0.6rem;
+          padding: 0.32rem 0.58rem;
+          font-family: "Rajdhani", sans-serif;
+          font-size: 0.95rem;
+          font-weight: 700;
+          line-height: 1;
+        }
+        .mission-card {
+          border-radius: 1.1rem;
+          padding: 1.15rem;
+          backdrop-filter: blur(14px);
+        }
+        .mission-card-title {
+          font-family: "Orbitron", monospace;
+          font-size: clamp(1rem, 1.45vw, 1.35rem);
+          font-weight: 900;
+          color: white;
+        }
+        .mission-card-subtitle,
+        .mission-date {
+          font-family: "Rajdhani", sans-serif;
+          font-size: 0.98rem;
+          font-weight: 700;
+        }
+        .mission-date {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          color: rgba(203,213,225,0.58);
+          white-space: nowrap;
+        }
+        .mission-bullets {
+          display: grid;
+          gap: 0.55rem;
+          margin-top: 0.75rem;
+        }
+        .mission-bullets li {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.62rem;
+          color: rgba(226,232,240,0.72);
+          font-size: clamp(0.92rem, 1.12vw, 1.08rem);
+          line-height: 1.42;
+          font-weight: 500;
+        }
+        .mission-bullets li span {
+          width: 0.35rem;
+          height: 0.35rem;
+          margin-top: 0.5rem;
+          border-radius: 999px;
+          flex-shrink: 0;
+        }
+        .mission-achievement-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 0.75rem;
+        }
+        .mission-achievement,
+        .mission-education,
+        .mission-contact-row {
+          border-radius: 1rem;
+          backdrop-filter: blur(14px);
+        }
+        .mission-achievement {
+          display: flex;
+          gap: 0.85rem;
+          align-items: center;
+          padding: 0.9rem;
+        }
+        .mission-achievement-icon,
+        .mission-contact-icon {
+          width: 2.45rem;
+          height: 2.45rem;
+          border-radius: 0.85rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+        .mission-achievement-title,
+        .mission-education-degree {
+          font-family: "Rajdhani", sans-serif;
+          font-size: 1rem;
+          line-height: 1.05;
+          font-weight: 700;
+          color: white;
+        }
+        .mission-achievement-sub,
+        .mission-education-inst,
+        .mission-education-period {
+          font-family: "Rajdhani", sans-serif;
+          font-size: 0.9rem;
+          font-weight: 700;
+        }
+        .mission-section-label {
+          margin-top: 0.2rem;
+          font-family: "Orbitron", monospace;
+          font-size: 0.78rem;
+          font-weight: 900;
+          letter-spacing: 0.2em;
+          color: rgba(226,232,240,0.42);
+          text-transform: uppercase;
+        }
+        .mission-education {
+          padding: 0.9rem;
+        }
+        .mission-education-inst {
+          color: rgba(203,213,225,0.58);
+        }
+        .mission-contact-grid {
+          display: grid;
+          gap: 0.7rem;
+        }
+        .mission-contact-row {
+          display: flex;
+          align-items: center;
+          gap: 0.9rem;
+          padding: 0.85rem 1rem;
+          transition: transform 180ms ease, border-color 180ms ease;
+        }
+        .mission-contact-label {
+          font-family: "Orbitron", monospace;
+          font-size: 0.72rem;
+          font-weight: 900;
+          letter-spacing: 0.1em;
+          color: rgba(203,213,225,0.5);
+          text-transform: uppercase;
+        }
+        .mission-contact-value {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          font-family: "Rajdhani", sans-serif;
+          font-size: 1.08rem;
+          font-weight: 700;
+          transition: color 250ms ease;
+        }
+        .mission-action-button {
+          width: 2rem;
+          height: 2rem;
+          border-radius: 0.65rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: rgba(203,213,225,0.65);
+          transition: color 160ms ease, transform 160ms ease;
+        }
+        .mission-action-button:hover {
+          color: white;
+          transform: translateY(-1px);
+        }
 
         @media (max-width: 768px) {
           .overlay-panel {
             left: 0 !important; right: 0 !important;
             top: auto; bottom: 0;
             width: 100% !important;
-            height: 55vh;
+            height: 62vh;
             justify-content: flex-start;
           }
           .panel-inner {
             padding: 1.5rem 1.5rem 2rem !important;
             overflow-y: auto;
             height: 100%;
+          }
+          .mission-headline {
+            font-size: clamp(2rem, 9vw, 3rem);
+          }
+          .mission-copy {
+            font-size: 1rem;
+          }
+          .mission-stat-grid,
+          .mission-achievement-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+          .mission-skill-row {
+            grid-template-columns: 1fr;
+            gap: 0.55rem;
           }
         }
       `}</style>
