@@ -20,7 +20,7 @@ export default function About() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
 
   return (
-    <section id="about" className="relative py-24 px-6" ref={ref}>
+    <section id="about" className="relative py-16 sm:py-24 px-4 sm:px-6" ref={ref}>
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -29,25 +29,25 @@ export default function About() {
           className="text-center mb-16"
         >
           <p className="text-cyan-400 text-sm font-semibold tracking-widest uppercase mb-3">Who I Am</p>
-          <h2 className="text-4xl md:text-5xl font-black">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black">
             About <span className="gradient-text">Me</span>
           </h2>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
+        <div className="grid lg:grid-cols-2 gap-8 sm:gap-16 items-center mb-20">
           {/* Text */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.1 }}
           >
-            <p className="text-gray-300 text-lg leading-relaxed mb-6">
+            <p className="text-gray-300 text-sm sm:text-base md:text-lg leading-relaxed mb-6">
               I'm a <span className="text-cyan-400 font-semibold">Full Stack Software Engineer</span> who
               enjoys owning systems end-to-end — from design decisions to production support.
               I specialize in building <span className="text-purple-400 font-semibold">scalable, high-reliability</span> web
               applications using Node.js, TypeScript, React, and modern data stores.
             </p>
-            <p className="text-gray-400 text-lg leading-relaxed mb-6">
+            <p className="text-gray-400 text-sm sm:text-base md:text-lg leading-relaxed mb-6">
               At Transfi, I designed event-driven microservices that enabled independent scaling and
               safer deployments. I built webhook integrations with replay protection, and admin
               dashboards that cut operational effort by 50%.
@@ -82,7 +82,7 @@ export default function About() {
         </div>
 
         {/* Trait cards */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {traits.map((trait, i) => (
             <motion.div
               key={trait.title}

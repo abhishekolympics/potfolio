@@ -13,8 +13,8 @@ export default function Hero() {
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 w-full pt-20">
-        <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[calc(100vh-5rem)]">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full pt-16 sm:pt-20">
+        <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center min-h-[calc(100vh-5rem)]">
           {/* Left: Text */}
           <div>
             <motion.div
@@ -33,7 +33,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-5xl md:text-7xl font-black leading-tight mb-4"
+              className="text-4xl sm:text-5xl md:text-7xl font-black leading-tight mb-4"
             >
               Hi, I'm{' '}
               <span className="gradient-text">Abhishek</span>
@@ -43,7 +43,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-2xl md:text-3xl font-light text-gray-400 mb-6 h-10"
+              className="text-lg sm:text-2xl md:text-3xl font-light text-gray-400 mb-6 h-10"
             >
               <TypeAnimation
                 sequence={[
@@ -69,7 +69,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="text-gray-400 text-lg leading-relaxed max-w-xl mb-8"
+              className="text-gray-400 text-sm sm:text-base md:text-lg leading-relaxed max-w-xl mb-8"
             >
               Building production-ready web applications end-to-end — from
               scalable APIs and event-driven microservices to polished React UIs.
@@ -80,18 +80,18 @@ export default function Hero() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="flex flex-wrap items-center gap-4 mb-10"
+              className="flex flex-col sm:flex-row flex-wrap items-center gap-3 sm:gap-4 mb-10"
             >
               <a
                 href="#contact"
-                className="px-8 py-3 rounded-xl font-semibold text-black transition-all duration-200 hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/30"
+                className="w-full sm:w-auto text-center px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-semibold text-black text-sm sm:text-base transition-all duration-200 hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/30"
                 style={{ background: 'linear-gradient(135deg, #00f0ff, #915eff)' }}
               >
                 Get In Touch
               </a>
               <a
                 href="#experience"
-                className="px-8 py-3 rounded-xl font-semibold text-white border border-white/20 hover:border-white/40 transition-all duration-200 hover:scale-105 glass"
+                className="w-full sm:w-auto text-center px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-semibold text-white border border-white/20 hover:border-white/40 transition-all duration-200 hover:scale-105 glass text-sm sm:text-base"
               >
                 View Work
               </a>

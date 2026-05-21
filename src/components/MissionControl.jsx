@@ -11,7 +11,7 @@ export default function MissionControl({
 }) {
   return (
     <>
-      <div className="mc-toggles fixed top-20 right-6 z-40 flex items-center gap-2">
+      <div className="fixed top-16 sm:top-20 right-3 sm:right-6 z-40 flex flex-col sm:flex-row items-center gap-1.5 sm:gap-2">
         <button
           onClick={() => setSoundEnabled(v => !v)}
           className="mission-toggle"

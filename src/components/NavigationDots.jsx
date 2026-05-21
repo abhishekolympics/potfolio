@@ -59,16 +59,16 @@ export default function NavigationDots({ current, navigate }) {
       <style>{`
         @media (max-width: 768px) {
           .nav-dots {
-            top: 4.85rem !important;
+            top: 5.2rem !important;
             left: 50% !important;
             right: auto !important;
             transform: translateX(-50%) !important;
             flex-direction: row !important;
-            gap: 0.65rem !important;
-            padding: 0.45rem 0.6rem;
+            gap: 0.5rem !important;
+            padding: 0.35rem 0.5rem;
             border: 1px solid rgba(255,255,255,0.08);
             border-radius: 999px;
-            background: rgba(3,6,20,0.46);
+            background: rgba(3,6,20,0.5);
             backdrop-filter: blur(14px);
           }
           .nav-dots span {

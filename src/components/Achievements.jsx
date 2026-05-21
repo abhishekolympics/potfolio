@@ -90,7 +90,7 @@ export default function Achievements() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
 
   return (
-    <section id="achievements" className="relative py-24 px-6" ref={ref}>
+    <section id="achievements" className="relative py-16 sm:py-24 px-4 sm:px-6" ref={ref}>
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div className="w-[700px] h-[400px] rounded-full bg-yellow-500/5 blur-3xl" />
       </div>
@@ -103,12 +103,12 @@ export default function Achievements() {
           className="text-center mb-16"
         >
           <p className="text-yellow-400 text-sm font-semibold tracking-widest uppercase mb-3">Recognition</p>
-          <h2 className="text-4xl md:text-5xl font-black">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black">
             <span className="gradient-text">Achievements</span>
           </h2>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-8 items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 items-center">
           {/* Left cards */}
           <div className="space-y-5">
             {achievements.slice(0, 2).map((a, i) => (
@@ -121,7 +121,7 @@ export default function Achievements() {
             initial={{ opacity: 0, scale: 0 }}
             animate={inView ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.8, delay: 0.2, type: 'spring' }}
-            className="h-72 hidden lg:block"
+            className="h-56 sm:h-64 md:h-72 hidden md:block"
           >
             <Canvas camera={{ position: [0, 0, 10], fov: 50 }}>
               <Suspense fallback={null}>
@@ -146,10 +146,10 @@ export default function Achievements() {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="mt-16"
+          className="mt-12 sm:mt-16"
         >
-          <h3 className="text-2xl font-bold text-center mb-8 text-gray-300">Education</h3>
-          <div className="grid md:grid-cols-2 gap-5 max-w-3xl mx-auto">
+          <h3 className="text-xl sm:text-2xl font-bold text-center mb-6 sm:mb-8 text-gray-300">Education</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 max-w-3xl mx-auto">
             {[
               {
                 degree: 'Master of Computer Applications',

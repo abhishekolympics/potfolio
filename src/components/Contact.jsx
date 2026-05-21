@@ -100,7 +100,7 @@ export default function Contact() {
   ]
 
   return (
-    <section id="contact" className="relative py-24 px-6" ref={ref}>
+    <section id="contact" className="relative py-16 sm:py-24 px-4 sm:px-6" ref={ref}>
       <CopyToast visible={copied} />
 
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/20 to-transparent" />
@@ -116,7 +116,7 @@ export default function Contact() {
           className="text-center mb-6"
         >
           <p className="text-pink-400 text-sm font-semibold tracking-widest uppercase mb-3">Let's Connect</p>
-          <h2 className="text-4xl md:text-5xl font-black">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black">
             Get In <span className="gradient-text">Touch</span>
           </h2>
         </motion.div>
@@ -125,13 +125,13 @@ export default function Contact() {
           initial={{ opacity: 0, y: 10 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-gray-400 text-center text-lg mb-14 max-w-xl mx-auto"
+          className="text-gray-400 text-center text-base sm:text-lg mb-10 sm:mb-14 max-w-xl mx-auto"
         >
           I'm currently open to new opportunities. Whether you have a project, a question,
           or just want to say hi — reach out through any channel below.
         </motion.p>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-14">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-10 sm:mb-14">
           {contactLinks.map((link, i) => {
             const isEmail = link.copyable
             const Tag = isEmail ? 'button' : 'a'
@@ -148,7 +148,7 @@ export default function Contact() {
               >
                 <Tag
                   {...props}
-                  className="w-full glass rounded-2xl p-6 flex flex-col gap-4 hover:scale-[1.03] transition-all duration-200 group text-left"
+                  className="w-full glass rounded-2xl p-4 sm:p-6 flex flex-col gap-3 sm:gap-4 hover:scale-[1.03] transition-all duration-200 group text-left text-sm sm:text-base"
                   style={{ borderColor: `${link.color}20` }}
                 >
                   <div className="flex items-center justify-between">
@@ -205,7 +205,7 @@ export default function Contact() {
               onClick={copyEmail}
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
-              className="relative px-10 py-4 rounded-xl font-bold text-black text-lg overflow-hidden flex items-center gap-3 shadow-lg shadow-cyan-500/20"
+              className="relative px-6 sm:px-10 py-3 sm:py-4 rounded-xl font-bold text-black text-base sm:text-lg overflow-hidden flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20"
               style={{ background: 'linear-gradient(135deg, #00f0ff, #915eff)' }}
             >
               <AnimatePresence mode="wait" initial={false}>

@@ -29,23 +29,23 @@ export default function Navbar({ currentSection, onNavigate }) {
         transition: 'border-color 0.8s ease',
       }}
     >
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
         {/* Logo */}
         <motion.button
           onClick={() => onNavigate(0)}
-          className="text-xl font-black shimmer-text"
+          className="text-lg sm:text-xl font-black shimmer-text"
           whileHover={{ scale: 1.05 }}
         >
           AKS
         </motion.button>
 
         {/* Desktop links */}
-        <ul className="hidden md:flex items-center gap-7">
+        <ul className="hidden md:flex items-center gap-4 lg:gap-7">
           {NAV_LINKS.map((link) => (
             <li key={link.index}>
               <button
                 onClick={() => onNavigate(link.index)}
-                className="text-sm transition-colors duration-200 relative group"
+                className="text-xs md:text-sm transition-colors duration-200 relative group"
                 style={{ color: currentSection === link.index ? color : '#9ca3af' }}
               >
                 {link.label}
@@ -66,15 +66,15 @@ export default function Navbar({ currentSection, onNavigate }) {
           href="https://drive.google.com/file/d/1Cn_a86TjdqfaQLHMjLN3qen_t0y2pS21/view"
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-lg border text-sm font-medium transition-all duration-200"
+          className="hidden md:flex items-center gap-2 px-3 md:px-4 py-1 md:py-1.5 rounded-lg border text-xs md:text-sm font-medium transition-all duration-200"
           style={{ borderColor: `${color}50`, color: color }}
         >
           Resume
         </a>
 
         {/* Mobile burger */}
-        <button className="md:hidden text-white" onClick={() => setOpen(!open)}>
-          {open ? <X size={22} /> : <Menu size={22} />}
+        <button className="md:hidden text-white p-1" onClick={() => setOpen(!open)}>
+          {open ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
 
@@ -88,12 +88,12 @@ export default function Navbar({ currentSection, onNavigate }) {
             className="md:hidden border-t border-white/5"
             style={{ background: 'rgba(5,8,22,0.95)' }}
           >
-            <ul className="flex flex-col p-5 gap-4">
+            <ul className="flex flex-col p-4 gap-3">
               {NAV_LINKS.map((link) => (
                 <li key={link.index}>
                   <button
                     onClick={() => { onNavigate(link.index); setOpen(false) }}
-                    className="text-gray-300 hover:text-white text-base transition-colors"
+                    className="text-gray-300 hover:text-white text-sm md:text-base transition-colors"
                   >
                     {link.label}
                   </button>
@@ -103,7 +103,7 @@ export default function Navbar({ currentSection, onNavigate }) {
                 <a
                   href="https://drive.google.com/file/d/1Cn_a86TjdqfaQLHMjLN3qen_t0y2pS21/view"
                   target="_blank" rel="noopener noreferrer"
-                  className="inline-flex text-sm px-4 py-2 rounded-lg border border-white/20 text-gray-300"
+                  className="inline-flex text-xs md:text-sm px-3 md:px-4 py-2 rounded-lg border border-white/20 text-gray-300"
                 >
                   Resume
                 </a>
