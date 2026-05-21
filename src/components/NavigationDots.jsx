@@ -75,6 +75,11 @@ export default function NavigationDots({ current, navigate }) {
             display: none;
           }
         }
+        @media (max-height: 500px) and (orientation: landscape) {
+          .nav-dots {
+            display: none;
+          }
+        }
       `}</style>
     </div>
   )

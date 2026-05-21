@@ -359,8 +359,10 @@ function Planet({ data, isActive, onProjectSelect }) {
     }
   })
 
+  const isMobile = window.innerWidth <= 768
+
   return (
-    <group position={[data.x, data.y, data.z]}>
+    <group position={[data.x, data.y, data.z]} scale={isMobile ? 0.68 : 1}>
       <mesh ref={coreRef}>
         <sphereGeometry args={[data.r, 96, 96]} />
         <meshStandardMaterial
@@ -420,9 +422,9 @@ function CameraRig({ currentSection, motionEnabled }) {
       ? Math.min(delta * (distance > 35 ? 2.85 : 1.55), 0.13)
       : Math.min(delta * 1.35, 0.08)
 
-    const targetCamX = isMobile ? planet.x * 0.88 : stop.x
-    const targetCamY = isMobile ? planet.y * 0.9 + 0.8 : stop.y
-    const targetCamZ = isMobile ? planet.z + 18 : stop.z
+    const targetCamX = isMobile ? (planet.x * 0.88 + (planet.side === 'left' ? 3.5 : -3.5)) : stop.x
+    const targetCamY = isMobile ? planet.y * 0.9 + 0.4 : stop.y
+    const targetCamZ = isMobile ? planet.z + 16 : stop.z
 
     camera.position.x += (targetCamX - camera.position.x) * travel
     camera.position.y += (targetCamY - camera.position.y) * travel
@@ -432,7 +434,7 @@ function CameraRig({ currentSection, motionEnabled }) {
     // the planet on its side of the screen while still making the trip feel steered.
     const sway = motionEnabled && !isMobile ? Math.sin(camera.position.z * 0.025) * 2.2 : 0
     if (isMobile) {
-      target.current.set(planet.x * 0.9, planet.y - 2.15, planet.z - 18)
+      target.current.set(planet.x * (planet.side === 'left' ? 0.9 : 0.8), planet.y - 2.4, planet.z - 18)
     } else {
       target.current.set(planet.x * 0.38 + sway, planet.y * 0.34, planet.z - 20)
     }

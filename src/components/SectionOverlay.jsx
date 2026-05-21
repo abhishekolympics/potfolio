@@ -226,30 +226,48 @@ const JOBS = [
 ]
 
 function ExperienceContent({ color }) {
+  const [activeJob, setActiveJob] = useState(0)
   return (
     <div className="mission-stack">
       <MissionHeader color={color} code="FLIGHT RECORD" title="Experience Trail" />
-      {JOBS.map(j => (
-        <div key={j.company} className="mission-card" style={{ background: `${j.color}08`, border: `1px solid ${j.color}25`, boxShadow: `0 0 28px ${j.color}10` }}>
-          <div className="flex justify-between items-start mb-2 gap-2 flex-wrap">
-            <div>
-              <div className="mission-card-title">{j.company}</div>
-              <div className="mission-card-subtitle" style={{ color: j.color }}>{j.role}</div>
+      <div
+        className="mission-exp-scroll"
+        onScroll={e => {
+          const w = e.currentTarget.clientWidth * 0.87
+          setActiveJob(Math.min(Math.round(e.currentTarget.scrollLeft / w), JOBS.length - 1))
+        }}
+      >
+        {JOBS.map(j => (
+          <div key={j.company} className="mission-exp-card mission-card" style={{ background: `${j.color}08`, border: `1px solid ${j.color}25`, boxShadow: `0 0 28px ${j.color}10` }}>
+            <div className="flex justify-between items-start mb-2 gap-2 flex-wrap">
+              <div>
+                <div className="mission-card-title">{j.company}</div>
+                <div className="mission-card-subtitle" style={{ color: j.color }}>{j.role}</div>
+              </div>
+              <span className="mission-date">
+                <Calendar size={12} />{j.period}
+              </span>
             </div>
-            <span className="mission-date">
-              <Calendar size={12} />{j.period}
-            </span>
+            <ul className="mission-bullets">
+              {j.bullets.map((b, i) => (
+                <li key={i}>
+                  <span style={{ background: j.color, boxShadow: `0 0 10px ${j.color}` }} />
+                  {b}
+                </li>
+              ))}
+            </ul>
           </div>
-          <ul className="mission-bullets">
-            {j.bullets.map((b, i) => (
-              <li key={i}>
-                <span style={{ background: j.color, boxShadow: `0 0 10px ${j.color}` }} />
-                {b}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+        ))}
+      </div>
+      <div className="mission-exp-pager">
+        {JOBS.map((j, i) => (
+          <span
+            key={i}
+            className={`mission-exp-dot${i === activeJob ? ' active' : ''}`}
+            style={i === activeJob ? { background: j.color, boxShadow: `0 0 8px ${j.color}80` } : {}}
+          />
+        ))}
+      </div>
     </div>
   )
 }
@@ -466,6 +484,7 @@ export default function SectionOverlay({ current, navigate, onLaunchGame }) {
   return (
     <>
       <style>{`
+        /* ── Desktop / tablet ─────────────────────────────────────── */
         .overlay-panel {
           position: fixed;
           top: 0; bottom: 0;
@@ -475,6 +494,7 @@ export default function SectionOverlay({ current, navigate, onLaunchGame }) {
           justify-content: center;
           z-index: 20;
           pointer-events: auto;
+          background: var(--panel-grad);
         }
         .overlay-panel.left  { left: 0; }
         .overlay-panel.right { right: 0; }
@@ -643,6 +663,18 @@ export default function SectionOverlay({ current, navigate, onLaunchGame }) {
           display: grid;
           gap: 0.7rem;
         }
+        .mission-exp-scroll {
+          display: grid;
+          gap: 1.1rem;
+        }
+        .mission-exp-pager { display: none; }
+        .mission-exp-dot {
+          width: 0.4rem; height: 0.4rem;
+          border-radius: 999px;
+          background: rgba(255,255,255,0.2);
+          transition: background 250ms ease, transform 250ms ease, box-shadow 250ms ease;
+        }
+        .mission-exp-dot.active { transform: scaleX(2.4); }
         .mission-game-button {
           width: fit-content;
           display: inline-flex;
@@ -822,6 +854,10 @@ export default function SectionOverlay({ current, navigate, onLaunchGame }) {
         @keyframes transmissionSweep {
           to { transform: translateX(100%); }
         }
+        @keyframes panelGlow {
+          0%, 100% { opacity: 0.14; transform: scaleX(0.45); }
+          50% { opacity: 0.58; transform: scaleX(1); }
+        }
         .mission-contact-row {
           display: flex;
           align-items: center;
@@ -861,83 +897,189 @@ export default function SectionOverlay({ current, navigate, onLaunchGame }) {
           transform: translateY(-1px);
         }
 
+        /* ── Portrait mobile (≤ 768 px) ─ glass card ────────────── */
         @media (max-width: 768px) {
           .overlay-panel {
             left: 0 !important; right: 0 !important;
             top: auto; bottom: 0;
             width: 100% !important;
-            height: 58vh;
+            /* 54dvh leaves the top 46% clean for the planet */
+            height: 54dvh; height: 54vh;
             justify-content: flex-start;
             z-index: 30;
+            /* ── Frosted glass card ──────────────────────────── */
+            background: rgba(3,6,20,0.82) !important;
+            backdrop-filter: blur(18px) saturate(1.35) !important;
+            -webkit-backdrop-filter: blur(18px) saturate(1.35) !important;
+            border-radius: 1.5rem 1.5rem 0 0;
+            /* Fallback border then dynamic accent colour */
+            border-top: 1px solid rgba(107,216,255,0.22);
+            border-top: 1px solid color-mix(in srgb, var(--section-color, #6bd8ff) 32%, transparent);
+            box-shadow:
+              0 -18px 70px color-mix(in srgb, var(--section-color, #6bd8ff) 16%, transparent),
+              inset 0 1px 0 rgba(255,255,255,0.06);
+          }
+          /* Pulsing accent line on the rim — the HUD glow */
+          .overlay-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 18%; right: 18%;
+            height: 1px;
+            background: var(--section-color, #6bd8ff);
+            border-radius: 999px;
+            animation: panelGlow 3s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 2;
           }
           .panel-inner {
-            padding: 1.15rem 1.2rem 1.4rem !important;
+            padding: 0.9rem 1.1rem !important;
+            padding-bottom: max(1.2rem, env(safe-area-inset-bottom)) !important;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             height: 100%;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(107,216,255,0.3) transparent;
           }
-          .mission-stack {
-            gap: 0.82rem;
+          .panel-inner::-webkit-scrollbar { width: 3px; }
+          .panel-inner::-webkit-scrollbar-track { background: transparent; }
+          .panel-inner::-webkit-scrollbar-thumb {
+            background: color-mix(in srgb, var(--section-color, #6bd8ff) 45%, transparent);
+            border-radius: 999px;
           }
-          .mission-title {
-            font-size: clamp(1.45rem, 8vw, 2.25rem);
-          }
-          .mission-code {
-            font-size: 0.62rem;
-          }
-          .mission-headline {
-            font-size: clamp(1.9rem, 9vw, 2.8rem);
-          }
-          .mission-copy {
-            font-size: 0.96rem;
-            line-height: 1.45;
-          }
-          .mission-copy.strong {
-            font-size: 1rem;
-          }
-          .mission-type {
-            min-height: 1.45rem;
-            font-size: 0.86rem;
-          }
+          .mission-stack    { gap: 0.6rem; }
+          .mission-header   { gap: 0.2rem; margin-bottom: 0; }
+          .mission-code     { font-size: 0.58rem; }
+          .mission-title    { font-size: clamp(1.3rem, 6.5vw, 1.85rem); }
+          .mission-headline { font-size: clamp(1.6rem, 8vw, 2.45rem); }
+          .mission-copy     { font-size: 0.9rem; line-height: 1.42; }
+          .mission-copy.strong { font-size: 0.93rem; }
+          .mission-type     { min-height: 1.3rem; font-size: 0.8rem; }
           .mission-stat-grid,
-          .mission-achievement-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+          .mission-achievement-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.48rem; }
+          .mission-stat     { padding: 0.58rem 0.42rem; }
+          .mission-stat-value { font-size: 1rem; }
+          .mission-stat-label { font-size: 0.76rem; margin-top: 0.25rem; }
+          .mission-skill-grid { gap: 0.45rem; }
+          .mission-skill-row { grid-template-columns: 5.8rem 1fr; gap: 0.38rem; padding: 0.52rem 0.62rem; }
+          .mission-skill-cat { font-size: 0.66rem; }
+          .mission-skill-chip { font-size: 0.82rem; padding: 0.2rem 0.4rem; }
+          .mission-card     { padding: 0.72rem; }
+          .mission-card-title { font-size: 0.92rem; }
+          .mission-bullets  { gap: 0.38rem; margin-top: 0.48rem; }
+          .mission-bullets li { font-size: 0.84rem; }
+          .mission-achievement { padding: 0.6rem; gap: 0.58rem; }
+          .mission-achievement-icon,
+          .mission-contact-icon { width: 2rem; height: 2rem; }
+          .mission-achievement-title,
+          .mission-education-degree { font-size: 0.86rem; }
+          .mission-achievement-sub,
+          .mission-education-inst,
+          .mission-education-period { font-size: 0.78rem; }
+          .mission-contact-row { padding: 0.58rem 0.68rem; gap: 0.65rem; }
+          .mission-contact-label { font-size: 0.62rem; }
+          .mission-contact-value { font-size: 0.88rem; }
+          .mission-game-button { font-size: 0.7rem; padding: 0.58rem 0.75rem; }
+          .mission-action-button { width: 2.2rem; height: 2.2rem; border-radius: 0.75rem; }
+          .mission-primary, .mission-secondary { padding: 0.7rem 0.9rem; font-size: 0.74rem; }
+          .mission-icon-link { width: 2.55rem; height: 2.55rem; }
+
+          /* ── Horizontal swipe carousel for Experience ─────────── */
+          .mission-exp-scroll {
+            display: flex;
+            gap: 0.7rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+            /* bleed to panel edges so next card peeks through */
+            margin: 0 -1.1rem;
+            padding: 0 1.1rem 0.15rem;
+            scrollbar-width: none;
           }
-          .mission-stat {
-            padding: 0.72rem 0.55rem;
+          .mission-exp-scroll::-webkit-scrollbar { display: none; }
+          .mission-exp-card {
+            flex: 0 0 87%;
+            scroll-snap-align: start;
+            min-width: 0;
           }
-          .mission-skill-row {
-            grid-template-columns: 1fr;
-            gap: 0.55rem;
-            padding: 0.68rem 0.75rem;
+          .mission-exp-pager {
+            display: flex;
+            justify-content: center;
+            gap: 0.44rem;
+            margin-top: 0.05rem;
           }
-          .mission-card {
-            padding: 0.9rem;
+
+          /* ── Section-adaptive panel heights ──────────────────── */
+          /* Each section gets exactly the room its content needs  */
+          .overlay-panel[data-section="0"] { height: 52dvh; height: 52vh; } /* Home    — hero, short  */
+          .overlay-panel[data-section="1"] { height: 58dvh; height: 58vh; } /* About   — stats grid   */
+          .overlay-panel[data-section="2"] { height: 64dvh; height: 64vh; } /* Skills  — 6 rows       */
+          .overlay-panel[data-section="3"] { height: 58dvh; height: 58vh; } /* Exp     — swipe cards  */
+          .overlay-panel[data-section="4"] { height: 62dvh; height: 62vh; } /* Achvmt  — badges + edu */
+          .overlay-panel[data-section="5"] { height: 56dvh; height: 56vh; } /* Contact — 5 rows       */
+        }
+
+        /* ── Landscape mobile (height ≤ 500 px) ─ side glass panel ─ */
+        @media (max-height: 500px) and (orientation: landscape) {
+          .overlay-panel {
+            top: 0 !important; bottom: 0 !important;
+            left: auto !important; right: auto !important;
+            width: min(44%, 360px) !important;
+            height: 100% !important;
+            justify-content: center !important;
+            border-radius: 0 !important;
+            border-top: none !important;
+            /* Side glass panel */
+            background: rgba(3,6,20,0.84) !important;
+            backdrop-filter: blur(16px) saturate(1.3) !important;
+            -webkit-backdrop-filter: blur(16px) saturate(1.3) !important;
+            box-shadow: none !important;
           }
-          .mission-bullets li {
-            font-size: 0.88rem;
+          .overlay-panel::before { display: none; }
+          .overlay-panel.left  {
+            left: 0 !important;
+            border-right: 1px solid color-mix(in srgb, var(--section-color, #6bd8ff) 25%, transparent);
           }
-          .mission-achievement {
-            padding: 0.72rem;
+          .overlay-panel.right {
+            right: 0 !important;
+            border-left: 1px solid color-mix(in srgb, var(--section-color, #6bd8ff) 25%, transparent);
           }
-          .mission-contact-row {
-            padding: 0.72rem 0.78rem;
+          .panel-inner {
+            padding: 3.8rem 1.3rem 1.2rem !important;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch;
+            height: 100% !important;
           }
-          .mission-contact-value {
-            font-size: 0.96rem;
-          }
-          .mission-action-button {
-            width: 1.85rem;
-            height: 1.85rem;
-          }
+          .overlay-panel.left  .panel-inner { padding-right: 1.8rem !important; }
+          .overlay-panel.right .panel-inner { padding-left:  1.8rem !important; }
+          .mission-stack    { gap: 0.55rem; }
+          .mission-title    { font-size: 1.15rem; }
+          .mission-headline { font-size: 1.5rem; line-height: 1; }
+          .mission-code     { font-size: 0.52rem; }
+          .mission-copy     { font-size: 0.82rem; }
+          .mission-copy.strong { font-size: 0.85rem; }
+          .mission-stat-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+          .mission-achievement-grid { grid-template-columns: 1fr; }
+          .mission-skill-row { grid-template-columns: 5.2rem 1fr; }
+        }
+
+        /* ── Small tablet (769–1024 px) ──────────────────────────── */
+        @media (min-width: 769px) and (max-width: 1024px) {
+          .overlay-panel { width: min(46%, 520px); }
+          .panel-inner { padding: 4.75rem 2.2rem 2.5rem; }
+          .overlay-panel.left  .panel-inner { padding-right: 3rem; }
+          .overlay-panel.right .panel-inner { padding-left:  3rem; }
+          .mission-headline { font-size: clamp(1.9rem, 3.2vw, 3.2rem); }
         }
       `}</style>
 
-      {/* Side content panel */}
+      {/* Side content panel — pass gradient via CSS variable so mobile media query can override it */}
       <AnimatePresence mode="wait">
         <motion.div
           key={`panel-${current}`}
           className={`overlay-panel ${isLeft ? 'left' : 'right'}`}
-          style={{ background: gradient }}
+          data-section={current}
+          style={{ '--panel-grad': gradient, '--section-color': color }}
           initial={{ opacity: 0, x: isLeft ? -50 : 50 }}
           animate={{ opacity: 1, x: 0, transition: { delay: 0.9, duration: 0.5, ease: 'easeOut' } }}
           exit={{ opacity: 0, x: isLeft ? -30 : 30, transition: { duration: 0.2 } }}

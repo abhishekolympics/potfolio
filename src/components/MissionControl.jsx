@@ -11,7 +11,7 @@ export default function MissionControl({
 }) {
   return (
     <>
-      <div className="fixed top-20 right-6 z-40 flex items-center gap-2">
+      <div className="mc-toggles fixed top-20 right-6 z-40 flex items-center gap-2">
         <button
           onClick={() => setSoundEnabled(v => !v)}
           className="mission-toggle"
@@ -178,9 +178,11 @@ export default function MissionControl({
           box-shadow: 0 0 40px rgba(107,216,255,0.28);
         }
         @media (max-width: 768px) {
-          .fixed.top-20.right-6 {
-            top: 4.7rem !important;
+          .mc-toggles {
+            top: 7.8rem !important;
             right: 0.65rem !important;
+            flex-direction: column;
+            gap: 0.4rem;
           }
           .mission-toggle span { display: none; }
           .mission-toggle { width: 2.35rem; height: 2.35rem; justify-content: center; padding: 0; }
@@ -190,6 +192,16 @@ export default function MissionControl({
           .mission-intro p {
             font-size: 0.96rem;
           }
+        }
+        @media (max-height: 500px) and (orientation: landscape) {
+          .mc-toggles {
+            top: 4.7rem !important;
+            right: 0.65rem !important;
+            flex-direction: row;
+            gap: 0.45rem;
+          }
+          .mission-toggle span { display: none; }
+          .mission-toggle { width: 2.35rem; height: 2.35rem; justify-content: center; padding: 0; }
         }
       `}</style>
     </>
